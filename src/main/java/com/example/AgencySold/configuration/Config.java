@@ -28,5 +28,21 @@ public class Config {
         props.put("mail.debug", "true");
         return mailSender;
     }
+    @Bean
+    @Override
+    protected UserDetailsService userDetailsService() {
+        return new InMemoryUserDetailsManager(
+                User.builder().
+                        username("admin").
+                        password(passwordEncoder().encode("admin")).
+                        authorities(Role.ADMIN.getAuthorities()).
+                        build()
+        );
+    }
+
+    @Bean
+    protected PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder(12);
+    }
 }
 
